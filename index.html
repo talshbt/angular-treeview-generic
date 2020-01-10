@@ -11,13 +11,60 @@
 </head>
 <body class="ej2-new"> 
 <script>
+var escapeHtmlArray = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&apos;"
+};
+
+function escapeXML(e) {
+    return String(e).replace(/[&<>"']/g, function(e) {
+        return escapeHtmlArray[e]
+    })
+}
+
+
     // pass your raw xml data here
-    var encodedStr = '&lt;level3Response&gt;&lt;messages&gt;&lt;message text="Syncfusion"&gt;&lt;correlationId&gt;11231213213&lt;/correlationId&gt;&lt;messageId&gt;213-232&lt;/messageId&gt;&lt;responseTime&gt;11ms&lt;/responseTime&gt;&lt;/message&gt;&lt;/messages&gt;&lt;/level3Response&gt;';
+
+    var rawStr = `    <kColl id="NBR4TransDeclarationData">
+        <poalimField id="transNameValue" value="NBR4"/>
+        <poalimField id="transSendName" value="blockSend001"/>
+        <poalimField id="transNigreretName0" value="nbqng056nigreret">EXAMPLE</poalimField>
+        <poalimField id="transNigreretTypeInt0" value="1496"/>
+        <poalimField id="transReceiveName" value="blockReceive001"/>
+        <poalimField id="transNigreretName1" value="trqra001nigreret"/>
+        <poalimField id="transNigreretTypeInt1" value="9000301"/>
+        <poalimField id="transNigreretName2" value="trqra002nigreret"/>
+        <poalimField id="transNigreretTypeInt2" value="9000302"/>
+        <poalimField id="transNigreretName3" value="trqra004nigreret"/>
+        <poalimField id="transNigreretTypeInt3" value="9000304"/>
+        <poalimField id="transNigreretName4" value="trqra005nigreret"/>
+        <poalimField id="transNigreretTypeInt4" value="9000305"/>
+        <poalimField id="transNigreretName5" value="trqhd000nigreret"/>
+        <poalimField id="transNigreretTypeInt5" value="9000900"/>
+        <poalimField id="transNigreretName6" value="trqhd002nigreret"/>
+        <poalimField id="transNigreretTypeInt6" value="9000902"/>
+        <poalimField id="transReplyOrderList" value="nbr4OrderList"/>
+        <poalimField id="transKeyNigLength" value="4"/>
+        <poalimField id="transNumNigrerot" value="7"/>
+        <poalimField id="transLoopBlocks" value="1"/>
+                <maayan id="transLoopBlocks" value="1">myCustomField</maayan>
+
+    </kColl>`;
     
+  var encodedStr = escapeXML(rawStr);
+
     //define the mapper field to be displayed as text in TreeView
     var mapper = [];
     //it will replace the tag name to custom attribute as TreeView node text
-    mapper.push({ TagName: "message", TextField: "text" });
+    mapper.push({ TagName: "poalimField", TextField: "text" });
+
+    mapper.push({ TagName: "maayan", TextField: "text" });
+
+
+
     convertTreeData(encodedStr, mapper);
     
     //to convert raw xml to xml text node
@@ -36,11 +83,20 @@
     
     //to convert xml to json with required format
     function xmlToJson(args, treeData, mapper) {
+
+
       for (var i = 0, length = args.childNodes.length; i < length; i++) {
         var nodeText = undefined, tag = args.childNodes[i]
+        //if(args.childNodes[i].length > 0 )
+        //{
+        //console.log(tag.tagName);
+
+        //}
+        
+        
         for (var j = 0 ; j < mapper.length; j++) {
           if (mapper[j].TagName == tag.tagName) {
-            nodeText = tag.getAttribute(mapper[j].TextField);
+            nodeText = tag.getAttribute(mapper[j].TextField); //get attribute named value
             break;
           }
         }

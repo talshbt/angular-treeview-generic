@@ -72,7 +72,10 @@ function escapeXML(e) {
       window.treeData = [];
       window.id = 1;
       var parser = new DOMParser;
-      var dom = parser.parseFromString(
+      var dom = parser.parseFromString( //investigate this object, and figure out how to get the attribute 'value' and not the innerText between tags for EXAMPLE
+
+      //<tag>InnerText</tag>
+      
           '<!doctype html><body>' + encodedStr,
           'text/html');
       var decodedString = dom.body.textContent;
@@ -81,6 +84,10 @@ function escapeXML(e) {
       xmlToJson(XmlData, window.treeData, mapper);
     }
     
+  
+
+
+
     //to convert xml to json with required format
     function xmlToJson(args, treeData, mapper) {
 

@@ -1,0 +1,21 @@
+<div class="control-section" style="overflow:hidden;">
+    <div class="col-lg-12">
+      <div id= 'text'> <b>TreeView with static data</b></div>
+    <div class="control_wrapper">
+      
+        <ejs-treeview id="editing" #tree [fields]='field' (created)="onCreate($event)"></ejs-treeview>
+    </div>
+    </div>
+    <button id='btn'>Click me to render treeview with xml datasource</button>
+</div>
+<style>
+    .control_wrapper {
+        max-width: 500px;
+        margin: auto;
+        border: 1px solid #dddddd;
+        border-radius: 3px;
+    }
+    #text{
+      font-weight: bold
+    }
+</style>

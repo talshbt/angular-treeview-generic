@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Window</title>
+<link href="../../styles/OpenNew.css" rel="stylesheet">
+  <link href="//cdn.syncfusion.com/ej2/material.css" rel="stylesheet" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body class="ej2-new"> 
+<script>
+    // pass your raw xml data here
+    var encodedStr = '&lt;level3Response&gt;&lt;messages&gt;&lt;message text="Syncfusion"&gt;&lt;correlationId&gt;11231213213&lt;/correlationId&gt;&lt;messageId&gt;213-232&lt;/messageId&gt;&lt;responseTime&gt;11ms&lt;/responseTime&gt;&lt;/message&gt;&lt;/messages&gt;&lt;/level3Response&gt;';
+    
+    //define the mapper field to be displayed as text in TreeView
+    var mapper = [];
+    //it will replace the tag name to custom attribute as TreeView node text
+    mapper.push({ TagName: "message", TextField: "text" });
+    convertTreeData(encodedStr, mapper);
+    
+    //to convert raw xml to xml text node
+    function convertTreeData(encodedStr, mapper) {
+      window.treeData = [];
+      window.id = 1;
+      var parser = new DOMParser;
+      var dom = parser.parseFromString(
+          '<!doctype html><body>' + encodedStr,
+          'text/html');
+      var decodedString = dom.body.textContent;
+    
+      var XmlData = parser.parseFromString(decodedString, "text/xml");
+      xmlToJson(XmlData, window.treeData, mapper);
+    }
+    
+    //to convert xml to json with required format
+    function xmlToJson(args, treeData, mapper) {
+      for (var i = 0, length = args.childNodes.length; i < length; i++) {
+        var nodeText = undefined, tag = args.childNodes[i]
+        for (var j = 0 ; j < mapper.length; j++) {
+          if (mapper[j].TagName == tag.tagName) {
+            nodeText = tag.getAttribute(mapper[j].TextField);
+            break;
+          }
+        }
+        nodeText = (nodeText != undefined) ? nodeText : (tag.nodeType == 1 ? tag.tagName : tag.textContent);
+        var obj = { "NodeId": window.id, "NodeText": nodeText };
+        treeData.push(obj);
+        window.id++;
+        if (args.hasChildNodes()) {
+          if (obj['Nodechild'] == undefined) {
+            obj['Nodechild'] = [];
+          }
+          xmlToJson(tag, obj['Nodechild'], mapper);
+          if (obj["Nodechild"].length == 0) {
+            delete obj["Nodechild"];
+          }
+        }
+      }
+    }
+
+  </script>
+    
+
+  <app-root></app-root>
+</body>
+</html>

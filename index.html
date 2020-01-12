@@ -69,8 +69,8 @@ function escapeXML(e) {
     
     //to convert raw xml to xml text node
     function convertTreeData(encodedStr, mapper) {
-      window.treeData = [];
-      window.id = 1;
+     treeData = [];
+      id = 1;
       var parser = new DOMParser;
       var dom = parser.parseFromString( //investigate this object, and figure out how to get the attribute 'value' and not the innerText between tags for EXAMPLE
 
@@ -81,7 +81,7 @@ function escapeXML(e) {
       var decodedString = dom.body.textContent;
     
       var XmlData = parser.parseFromString(decodedString, "text/xml");
-      xmlToJson(XmlData, window.treeData, mapper);
+      xmlToJson(XmlData, treeData, mapper);
     }
     
   
@@ -108,9 +108,9 @@ function escapeXML(e) {
           }
         }
         nodeText = (nodeText != undefined) ? nodeText : (tag.nodeType == 1 ? tag.tagName : tag.textContent);
-        var obj = { "NodeId": window.id, "NodeText": nodeText };
+        var obj = { "NodeId": id, "NodeText": nodeText };
         treeData.push(obj);
-        window.id++;
+        id++;
         if (args.hasChildNodes()) {
           if (obj['Nodechild'] == undefined) {
             obj['Nodechild'] = [];
